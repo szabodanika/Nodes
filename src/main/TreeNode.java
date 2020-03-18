@@ -11,18 +11,31 @@ public class TreeNode<T extends Comparable> {
     }
 
     public TreeNode<T> remove(TreeNode<T> root, T value){
+        // ha root null akkor return null
         if(root == null) return null;
+        // ha a keresett ertek kisebb mint a root erteke, akkor meghivjuk a fuggvenyt a root.leften
         if(root.value.compareTo(value) == 1) root.left = remove(root.left, value);
+        // ha a keresett ertek nagyobb mint a root erteke, akkor meghivjuk a fuggvenyt a root.righton
         else if(root.value.compareTo(value) == -1) root.right = remove(root.right, value);
+        // ha a root erteke egyenlo a keresett ertekkel
         else {
-            if(!isLeaf(root)) {
+            //ha a root az nem level es mindket oldalon van gyerek
+            if(root.left != null && root.right != null) {
+                //megkeressuk jobb oldalt a legkisebb elemet
                 TreeNode<T> rightSmallest = findSmallest(root.right);
+                //a root erteket beallitjuk a jobb oldali legkisebb elem ertekere
                 root.value = rightSmallest.value;
+                //a root jobb oldalan kitoroljuk a legkisebb erteket
                 root.right = remove(root.right, rightSmallest.value);
-            } else if(root.left != null) root = root.left;
+            }
+            // ha a rootnak csak baloldalt van gyereke
+            else if(root.left != null) root = root.left;
+            // ha a rootnak csak jobboldalt van gyereke
             else if(root.right != null) root = root.right;
+            // ha a root az egy level
             else root = null;
         }
+        //visszaadjuk a rootot
         return root;
     }
 
